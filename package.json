@@ -1,0 +1,28 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "A chat app created by socket.io and react.",
+  "main": "index.js",
+  "repository": "https://github.com/jkest/chat",
+  "author": "Stephen J",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "react-scripts": "1.0.17",
+    "socket.io": "^2.0.4",
+    "uuid": "^3.1.0"
+  },
+  "scripts": {
+    "react": "react-scripts start",
+    "server": "nodemon ./src/server/index.js",
+    "start": "concurrently 'npm run react' 'npm run server'",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.12.1"
+  }
+}
