@@ -7,6 +7,7 @@
   "author": "Stephen J",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^4.17.4",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
     "react-scripts": "1.0.17",
@@ -14,15 +15,19 @@
     "uuid": "^3.1.0"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "concurrently 'npm run build-css' 'node-sass-chokidar src/ -o src/ --watch --recursive'",
     "react": "react-scripts start",
     "server": "nodemon ./src/server/index.js",
-    "start": "concurrently 'npm run react' 'npm run server'",
-    "build": "react-scripts build",
+    "start": "concurrently 'npm run watch-css' 'npm run react' 'npm run server'",
+    "build-js": "react-scripts build",
+    "build": "concurrently 'build-css' 'build-js'",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
+    "node-sass-chokidar": "^0.0.3",
     "nodemon": "^1.12.1"
   }
 }
