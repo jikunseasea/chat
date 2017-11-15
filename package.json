@@ -1,7 +1,7 @@
 {
   "name": "chat",
   "version": "1.0.0",
-  "description": "A chat app created by socket.io and react.",
+  "description": "A chat app created by socket.io, react and redux.",
   "main": "index.js",
   "repository": "https://github.com/jkest/chat",
   "author": "Stephen J",
@@ -10,7 +10,10 @@
     "lodash": "^4.17.4",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.0.17",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
     "socket.io": "^2.0.4",
     "uuid": "^3.1.0"
   },

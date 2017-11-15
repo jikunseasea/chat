@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { setSocket, setUser } from '../actions/RootActions';
 
 import {
   USER_CONNECTED,
@@ -14,13 +18,7 @@ const socketURL = "http://localhost:3231";
 class Layout extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      socket: null,
-      user: null
-    };
-
-    this.serUser = this.setUser.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   componentWillMount() {
@@ -32,30 +30,37 @@ class Layout extends Component {
     socket.on('connect', () => {
       console.log('Connected');
     });
-    this.setState({ socket });
+    const { setSocket } = this.props;
+    setSocket(socket);
   };
 
   setUser = (user) => {
-    const { socket } = this.state;
+    const { socket, setUser } = this.props;
     socket.emit(USER_CONNECTED, user);
-    this.setState({ user });
+    setUser(user);
   }
 
   logout = () => {
-    const { socket } = this.state;
+    const { socket, setUser } = this.props;
     socket.emit(LOGOUT);
-    this.setState({ user: null });
+    setUser(null);
   }
 
   render() {
-    const { title } = this.props;
-    const { socket } = this.state;
+    const { socket } = this.props;
     return (
       <div className="container">
-        <LoginForm socket={socket} setUser={this.serUser}/>
+        <LoginForm socket={socket} setUser={this.setUser}/>
       </div>
     );
   }
 }
 
-export default Layout;
+const mapStateToProps = state => ({ socket: state.socket });
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setSocket,
+  setUser
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
