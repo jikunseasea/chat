@@ -25,14 +25,14 @@ const user = (state = null, action) => {
   }
 };
 
-const nickname = (state = '', action) => {
-  switch (action.type) {
-    case SET_NICKNAME: 
-      return action.nickname;
-    default:
-      return state;
-  }
-};
+// const nickname = (state = '', action) => {
+//   switch (action.type) {
+//     case SET_NICKNAME: 
+//       return action.nickname;
+//     default:
+//       return state;
+//   }
+// };
 
 const loginError = (state = '', action) => {
   switch (action.type) {
@@ -47,6 +47,6 @@ const loginError = (state = '', action) => {
 export default combineReducers({
   socket,
   user,
-  nickname,
+  // nickname,
   loginError
 });

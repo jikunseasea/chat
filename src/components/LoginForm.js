@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { VERIFY_USER } from '../constants/Events';
+import { VERIFY_USER, USER_CONNECTED } from '../constants/Events';
 
-import { setNickname, setLoginError } from '../actions/RootActions';
+import { setLoginError } from '../actions/RootActions';
+
+import { createUser } from '../Factory';
+
+import LoginError from '../constants/LoginError';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -16,70 +20,83 @@ class LoginForm extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.setUser = this.setUser.bind(this);
+    this.verify = this.verify.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const { socket, nickname } = this.props;
-    // const { nickname } = this.state;
-    socket.emit(VERIFY_USER, nickname, this.setUser);
+    const { socket } = this.props;
+    // socket.emit(VERIFY_USER, nickname, this.setUser);
+    socket.emit(VERIFY_USER, this.textInput.value, ({ isValid, kind }) => {
+      this.verify({ isValid, kind });
+      if (isValid) {
+        const name = this.textInput.value;
+        const { setUser } = this.props;
+        setUser(createUser({ name }));
+      }
+    });
   }
 
-  setUser({ isUser, user }) {
-    console.log('====================================');
-    console.log(isUser, user);
-    console.log('====================================');
+  verify({ isValid, kind }) {
     const { setLoginError } = this.props;
-    if (isUser) {
-      // this.setError('User name taken');
-      setLoginError('User name taken');
-    } else {
-      this.props.setUser(user);
-      // this.setError('');
+    if (isValid) {
       setLoginError('');
+    } else {
+      switch (kind) {
+        case LoginError.EMPTY:
+          setLoginError(LoginError.EMPTY_INFO);
+          break;
+        case LoginError.EXISTED:
+          setLoginError(LoginError.EXISTED_INFO);
+          break;
+        default:
+          setLoginError(kind);
+      }
     }
   }
 
   handleChange(e) {
     e.preventDefault();
-    // this.setState({ nickname: this.textInput.value });
-    const { setNickname } = this.props;
-    setNickname(this.textInput.value);
+    const { socket } = this.props;
+    socket.emit(VERIFY_USER, this.textInput.value, this.verify);
   };
 
-  // setError(error) {
-  //   this.setState({ error });
-  // }
+  renderLoginError(loginError) {
+    if (loginError) {
+      return <div className="alert alert-danger">{loginError}</div>;
+    }
+  }
 
   render() {
     // const { nickname, error } = this.state;
-    const { nickname, loginError } = this.props;
+    const { loginError } = this.props;
     return (
-      <div className="login">
-        <form onSubmit={this.handleSubmit} className="login-form">
-          <h2><label htmlFor="nickname">Got a nickname?</label></h2>
+      <form onSubmit={this.handleSubmit}>
+        <h2><label htmlFor="nickname">Got a nickname?</label></h2>
+        <div className="input-group">
           <input
+            className="form-control"
             ref={input => this.textInput = input}
             id="nickname"
-            value={nickname}
+            // value={nickname}
             onChange={this.handleChange}
             placeholder="My cool username"
           />
-          <div className="error">{loginError?loginError:null}</div>
-        </form>
-      </div>
+          <span className="input-group-btn">
+            <button className="btn btn-default">Go!</button>
+          </span>
+        </div>
+        {this.renderLoginError(loginError)}
+      </form>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  nickname: state.nickname,
   loginError: state.loginError
 });
-const mapDispatchProps = dispatch => bindActionCreators({
-  setNickname,
+const mapDispatchToProps = dispatch => bindActionCreators({
   setLoginError
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
