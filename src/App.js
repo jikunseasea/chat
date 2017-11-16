@@ -10,6 +10,8 @@ import {
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './App.css';
+
 import { setSocket, setUser } from './actions/RootActions';
 
 import {
@@ -19,8 +21,19 @@ import {
 
 
 import LoginForm from './components/LoginForm';
+import Chat from './components/Chat';
 
 const socketURL = "http://localhost:3231";
+
+// const Test = (outterProps) => {
+//   console.log(outterProps);
+//   return (
+//     <Route p2={2} render={(props) => {
+//       console.log(props);
+//       return <div></div>;
+//     }}/>
+//   )
+// };
 
 class App extends Component {
   constructor(props) {
@@ -57,8 +70,9 @@ class App extends Component {
     const { socket } = this.props;
     return (
       <Router>
-        <div className="container">
-          <Route exact path="/" render={() => <LoginForm socket={socket} setUser={this.setUser}/>} />
+        <div>
+          <Route exact path="/" render={() => <LoginForm socket={socket} setUser={this.setUser} />} />
+          <Route path="/:username" render={({ match }) => <Chat username={match.params.username} />} />
         </div>
       </Router>
     );

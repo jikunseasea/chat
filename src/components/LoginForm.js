@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Redirect } from 'react-router-dom';
 
-import { VERIFY_USER, USER_CONNECTED } from '../constants/Events';
+import { VERIFY_USER } from '../constants/Events';
 
-import { setLoginError } from '../actions/RootActions';
+import {
+  setLoginError,
+  setIsConnected
+} from '../actions/RootActions';
 
 import { createUser } from '../Factory';
 
@@ -26,13 +30,14 @@ class LoginForm extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const { socket } = this.props;
-    // socket.emit(VERIFY_USER, nickname, this.setUser);
     socket.emit(VERIFY_USER, this.textInput.value, ({ isValid, kind }) => {
       this.verify({ isValid, kind });
       if (isValid) {
         const name = this.textInput.value;
-        const { setUser } = this.props;
+        const { setUser, setIsConnected } = this.props;
         setUser(createUser({ name }));
+        // If an user is created, then go to the chat page
+        setIsConnected(true);
       }
     });
   }
@@ -69,9 +74,12 @@ class LoginForm extends Component {
 
   render() {
     // const { nickname, error } = this.state;
-    const { loginError } = this.props;
+    const { loginError, isConnected, user } = this.props;
+    if (isConnected) {
+      return <Redirect to={`/${user.name}`} />
+    }
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="container">
         <h2><label htmlFor="nickname">Got a nickname?</label></h2>
         <div className="input-group">
           <input
@@ -93,10 +101,13 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
+  user: state.user,
+  isConnected: state.isConnected,
   loginError: state.loginError
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
-  setLoginError
+  setLoginError,
+  setIsConnected
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

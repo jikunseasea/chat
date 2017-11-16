@@ -20,39 +20,27 @@ const {
 } = require('../Factory');
 
 let connectedUser = {};
+let messages = [];
 
 module.exports = (socket) => {
   console.log(`Socket id = ${socket.id}`);
-
-
-  // socket.on(VERIFY_USER, (name, fn = () => {}) => {
-  //   if (isUser(connectedUser, name)) {
-  //     fn({ isUser: true });
-  //   } else {
-  //     const user = createUser({ name });
-  //     fn({ isUser: false, user });
-  //   }
-  // });
 
   socket.on(VERIFY_USER, (name, fn) => {
     fn(isValidUser(connectedUser, name));
   });
 
-  // socket.on(SET_USER, (name, fn) => {
-  //   fn(createUser({ name }));
-  // })
-
   socket.on(USER_CONNECTED, (user) => {
     connectedUser = addUser(connectedUser, user);
-
     console.log(connectedUser);
   })
 };
 
 const addUser = (userList, user) => _.assign({}, userList, { [user.name]: user });
+
 const removeUser = (userList, username) => _.omit(userList, username);
+
 // const isUser = (userList, username) => username in userList;
-const isUser = (userList, username) => {
+const isExistedUser = (userList, username) => {
   const isExisted = _.hasIn(userList, username)
   if (isExisted) {
     return { isValid: false, kind: EXISTED }
@@ -61,5 +49,5 @@ const isUser = (userList, username) => {
 };
 const isValidUser = (userList, username) => {
   if (!username) return { isValid: false, kind: EMPTY };
-  return isUser(userList, username);
+  return isExistedUser(userList, username);
 };

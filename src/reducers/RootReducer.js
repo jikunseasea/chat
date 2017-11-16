@@ -4,7 +4,9 @@ import {
   SET_SOCKET,
   SET_USER,
   SET_LOGIN_ERROR,
-  SET_NICKNAME
+  SET_IS_CONNECTED,
+  SET_IS_EMPTY_SEND
+  // SET_NICKNAME
 } from '../constants/ActionName';
 
 const socket = (state = null, action) => {
@@ -43,10 +45,29 @@ const loginError = (state = '', action) => {
   }
 };
 
+const isConnected = (state = false, action) => {
+  switch (action.type) {
+    case SET_IS_CONNECTED: 
+      return action.isConnected;
+    default:
+      return state;
+  }
+}
+
+const isEmptySend = (state = true, action) => {
+  switch (action.type) {
+    case SET_IS_EMPTY_SEND: 
+      return action.isEmptySend;
+    default:
+      return state;
+  }
+}
+
 
 export default combineReducers({
   socket,
   user,
-  // nickname,
-  loginError
+  loginError,
+  isConnected,
+  isEmptySend
 });
