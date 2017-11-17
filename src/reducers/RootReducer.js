@@ -5,8 +5,10 @@ import {
   SET_USER,
   SET_LOGIN_ERROR,
   SET_IS_CONNECTED,
-  SET_IS_EMPTY_SEND
-  // SET_NICKNAME
+  SET_IS_EMPTY_SEND,
+  SET_IS_LOGINED,
+  POST_MSG,
+  SET_TYPING_VALUE
 } from '../constants/ActionName';
 
 const socket = (state = null, action) => {
@@ -26,15 +28,6 @@ const user = (state = null, action) => {
       return state;
   }
 };
-
-// const nickname = (state = '', action) => {
-//   switch (action.type) {
-//     case SET_NICKNAME: 
-//       return action.nickname;
-//     default:
-//       return state;
-//   }
-// };
 
 const loginError = (state = '', action) => {
   switch (action.type) {
@@ -63,11 +56,38 @@ const isEmptySend = (state = true, action) => {
   }
 }
 
+const msgs = (state = [], action) => {
+  switch (action.type) {
+    case POST_MSG:
+      const { id, senderName, content, color, receivedAt } = action;
+      const msg = {
+        id,
+        senderName,
+        content,
+        color,
+        receivedAt
+      };
+      return [...state, msg];
+    default:
+      return state;
+  }
+}
+
+const typingValue = (state = '', action) => {
+  switch (action.type) {
+    case SET_TYPING_VALUE:
+      return action.typingValue;
+    default:
+      return state;
+  }
+}
 
 export default combineReducers({
   socket,
   user,
   loginError,
   isConnected,
-  isEmptySend
+  isEmptySend,
+  msgs,
+  typingValue
 });

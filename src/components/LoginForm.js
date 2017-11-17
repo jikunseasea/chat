@@ -17,10 +17,6 @@ import LoginError from '../constants/LoginError';
 class LoginForm extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   nickname: '',
-    //   error: ''
-    // };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -75,6 +71,7 @@ class LoginForm extends Component {
   render() {
     // const { nickname, error } = this.state;
     const { loginError, isConnected, user } = this.props;
+
     if (isConnected) {
       return <Redirect to={`/${user.name}`} />
     }

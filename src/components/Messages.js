@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
 
-const Messages = () => (
-  <div className="messages"></div>
-);
+import {
+  OTHER_DISCONNECTED
+} from '../constants/Events';
+
+class Messages extends Component {
+
+  constructor(props) {
+    super(props);
+
+  }
+
+
+  render() {
+    return <div className="messages"></div>;
+  }
+}
 
 export default Messages;

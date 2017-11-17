@@ -12,6 +12,7 @@ html {
       flex-flow: column nowrap; }
       html body .chat .welcome {
         padding-left: 3rem;
+        padding-right: 3rem;
         flex: none; }
       html body .chat .messages {
         flex: 1;

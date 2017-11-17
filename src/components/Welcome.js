@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
-const Welcome = ({ username }) => (
+const Welcome = ({ username, handleLogout }) => (
   <div className="jumbotron welcome">
-    <h3>Welcome, {username}</h3>
+    <h3 className="pull-left">Welcome, {username}</h3>
+    <button
+      className="pull-right btn btn-danger"
+      onClick={handleLogout}>Logout</button>
   </div>
 );
 

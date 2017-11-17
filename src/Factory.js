@@ -84,7 +84,8 @@ const getTime = date => `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}
 
 
 module.exports = {
-  createChat,
-  createMessage,
-  createUser
+  // createChat,
+  // createMessage,
+  createUser,
+  getTime
 };

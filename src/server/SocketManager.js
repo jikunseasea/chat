@@ -6,7 +6,8 @@ const io = require('./index.js').io;
 const {
   VERIFY_USER,
   USER_CONNECTED,
-  LOGOUT
+  USER_DISCONNECTED,
+  OTHER_DISCONNECTED
 } = require('../constants/Events');
 const {
   EMPTY,
@@ -19,19 +20,25 @@ const {
   createChat
 } = require('../Factory');
 
-let connectedUser = {};
-let messages = [];
+let connectedUsers = {};
+// let messages = [];
 
 module.exports = (socket) => {
   console.log(`Socket id = ${socket.id}`);
 
   socket.on(VERIFY_USER, (name, fn) => {
-    fn(isValidUser(connectedUser, name));
+    fn(isValidUser(connectedUsers, name));
   });
 
   socket.on(USER_CONNECTED, (user) => {
-    connectedUser = addUser(connectedUser, user);
-    console.log(connectedUser);
+    connectedUsers = addUser(connectedUsers, user);
+    console.log(connectedUsers);
+  })
+
+  socket.on(USER_DISCONNECTED, (username) => {
+    connectedUsers = removeUser(connectedUsers, username);
+    console.log(connectedUsers);
+    socket.broadcast.emit(OTHER_DISCONNECTED, username);
   })
 };
 

@@ -3,8 +3,15 @@ import {
   SET_USER,
   SET_LOGIN_ERROR,
   SET_IS_CONNECTED,
-  SET_IS_EMPTY_SEND
+  SET_IS_EMPTY_SEND,
+  POST_MSG,
+  SET_TYPING_VALUE
 } from '../constants/ActionName';
+
+const uuidv4 = require('uuid/v4');
+
+const { getTime } = require('../Factory'); 
+
 
 export const setSocket = socket => ({ type: SET_SOCKET, socket});
 
@@ -16,4 +23,13 @@ export const setIsConnected = isConnected => ({ type: SET_IS_CONNECTED, isConnec
 
 export const setIsEmptySend = isEmptySend => ({ type: SET_IS_EMPTY_SEND, isEmptySend });
 
-// export const setNickname = nickname => ({ type: SET_NICKNAME, nickname});
+export const postMsg = ({ senderName, content, color }) => ({
+  type: POST_MSG,
+  senderName,
+  content,
+  color,
+  id: uuidv4(),
+  receivedAt: getTime(new Date())
+});
+
+export const setTypingValue = typingValue => ({ type: SET_TYPING_VALUE, typingValue});
