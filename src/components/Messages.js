@@ -4,7 +4,6 @@ import {
   OTHER_DISCONNECTED
 } from '../constants/Events';
 
-class Messages extends Component {
 
   constructor(props) {
     super(props);
