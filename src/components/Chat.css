@@ -4,24 +4,27 @@ html {
     height: 100%;
     width: 100%;
     position: absolute; }
-    html body .chat {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-flow: column nowrap; }
-      html body .chat .welcome {
-        padding-left: 3rem;
-        padding-right: 3rem;
-        flex: none; }
-      html body .chat .messages {
-        flex: 1;
-        margin-bottom: 3rem; }
-      html body .chat .send {
-        flex: 0 0 4rem;
-        background-color: #aaa; }
-        html body .chat .send .full-height {
+    html body .chat .welcome {
+      padding-left: 3rem;
+      padding-right: 3rem;
+      position: fixed;
+      top: 0;
+      width: 100%; }
+    html body .chat .messages {
+      margin-bottom: 5rem;
+      font-size: 1.7rem;
+      list-style-type: none;
+      padding-left: 0;
+      position: fixed;
+      bottom: 0;
+      z-index: -1; }
+    html body .chat .send {
+      position: fixed;
+      height: 4rem;
+      bottom: 0;
+      background-color: #aaa; }
+      html body .chat .send .full-height {
+        height: 100%; }
+        html body .chat .send .full-height .full-height-change {
+          display: inline-block;
           height: 100%; }
-          html body .chat .send .full-height .full-height-change {
-            height: 100%;
-            display: inline-block; }

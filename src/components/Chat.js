@@ -13,7 +13,9 @@ import {
 
 import {
   USER_DISCONNECTED,
-  OTHER_DISCONNECTED
+  OTHER_DISCONNECTED,
+  OTHER_SENT,
+  SELF_SENT
 } from '../constants/Events';
 
 import { LEFT, OTHER_INFO, SELF_INFO } from '../constants/Msgs';
@@ -24,27 +26,26 @@ import Welcome from './Welcome';
 import Messages from './Messages';
 import Send from './Send';
 
-
-
 class Chat extends Component {
   constructor(props) {
     super(props);
     this.handleChangeSend = this.handleChangeSend.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handleSend = this.handleSend.bind(this);
+    this.handleSent = this.handleSent.bind(this);
     this.handleOtherLogout = this.handleOtherLogout.bind(this);
+    this.handleOtherSent = this.handleOtherSent.bind(this);
   }
 
   componentDidMount() {
-    // const { socket, handleOtherLogout } = this.props;
     const { socket } = this.props;
     socket.on(OTHER_DISCONNECTED, this.handleOtherLogout);
+    socket.on(OTHER_SENT, this.handleOtherSent);
   }
 
   componentWillUnmount() {
-    // const { socket, handleOtherLogout } = this.props;
     const { socket } = this.props;
     socket.off(OTHER_DISCONNECTED, this.handleOtherLogout);
+    socket.off(OTHER_SENT, this.handleOtherSent);
   }
 
 
@@ -60,46 +61,50 @@ class Chat extends Component {
 
   handleLogout() {
     const { setIsEmptySend, setUser, setIsConnected, socket, username } = this.props;
+    socket.emit(USER_DISCONNECTED, username);
     setIsEmptySend(true);
     setUser(null);
     setIsConnected(false);
-    socket.emit(USER_DISCONNECTED, username);
+  } 
+  
+  handleSent(e, input) {
+    e.preventDefault();
+    console.log(input);
+    const { socket, username, postMsg, setIsEmptySend, setTypingValue } = this.props;
+    postMsg({
+      senderName: username,
+      content: input.value,
+      color: SELF_INFO.color
+    });
+    socket.emit(SELF_SENT, username, input.value);
+    setIsEmptySend(true);
+    setTypingValue('');
   }
 
   handleOtherLogout(otherUsername) {
     const { postMsg } = this.props;
     postMsg({
       senderName: otherUsername,
-      content: LEFT.info,
+      content: LEFT.content,
       color: LEFT.color
     });
-    console.log(otherUsername);
+    // console.log(otherUsername);
   }
 
-  /// Todo
-  // handleOtherLogout(otherUsername) {
-  //   const { postMsg } = this.props;
-  //   postMsg({
-  //     senderName: otherUsername,
-  //     content: LEFT.info,
-  //     color: LEFT.color
-  //   });
-  // }
-  
-  handleSend(e, input) {
-    e.preventDefault();
-    const { username, postMsg, setIsEmptySend, setTypingValue } = this.props;
+  handleOtherSent(otherUsername, content) {
+    console.log(this);
+    const { postMsg } = this.props;
     postMsg({
-      senderName: username,
-      content: e.target.value,
-      color: SELF_INFO.color
+      senderName: otherUsername,
+      content: content,
+      color: OTHER_INFO.color
     });
-    setTypingValue('');
-    setIsEmptySend(true);
   }
+  
+
 
   render() {
-    const { username, socket, isEmptySend, isConnected, msgs, typingValue } = this.props;
+    const { username, isEmptySend, isConnected, msgs, typingValue } = this.props;
 
     if (!isConnected) {
       return <Redirect to="/" />
@@ -107,16 +112,11 @@ class Chat extends Component {
     return (
       <div className="fluid-container chat">
         <Welcome username={username} handleLogout={this.handleLogout} />
-        <Messages
-          socket={socket}
-          msgs={msgs}
-          handleOtherLogout={this.handleOtherLogout} />
+        <Messages msgs={msgs} />
         <Send
-          username={username}
-          socket={socket}
           isDisabledSend={isEmptySend}
           handleChangeSend={this.handleChangeSend}
-          handleSend={this.handleSend}
+          handleSent={this.handleSent}
           typingValue={typingValue} />
       </div>
     );

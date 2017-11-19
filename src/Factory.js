@@ -40,15 +40,15 @@ const createUser = ({ name = '' } = {}) => ({
  *   sender {string} - Indicate the message sent from whom
  * @returns {Message}
  */
-const createMessage = ({
-  message = '',
-  sender = ''
-} = {}) => ({
-  id: uuidv4(),
-  time: getTime(new Date(Date.now())),
-  message,
-  sender
-});
+// const createMessage = ({
+//   message = '',
+//   sender = ''
+// } = {}) => ({
+//   id: uuidv4(),
+//   time: getTime(new Date(Date.now())),
+//   message,
+//   sender
+// });
 
 /**
  * Chat type definition
@@ -68,19 +68,19 @@ const createMessage = ({
  *   users {...User} - Users of the chat
  * @returns {Chat} - A created Chat object
  */
-const createChat = ({
-  messages = [],
-  name = '',
-  users = []
-} = {}) => ({
-  id: uuidv4(),
-  name,
-  messages,
-  users,
-  typingUsers: []
-});
+// const createChat = ({
+//   messages = [],
+//   name = '',
+//   users = []
+// } = {}) => ({
+//   id: uuidv4(),
+//   name,
+//   messages,
+//   users,
+//   typingUsers: []
+// });
 
-const getTime = date => `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`;
+const getTime = date => `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}:${("0"+date.getSeconds()).slice(-2)}`;
 
 
 module.exports = {

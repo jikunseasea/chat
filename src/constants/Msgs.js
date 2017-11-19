@@ -1,6 +1,6 @@
 export const LEFT = {
   color: 'red',
-  content: 'Left...'
+  content: '离开...'
 };
 export const OTHER_INFO = {
   color: 'blue'

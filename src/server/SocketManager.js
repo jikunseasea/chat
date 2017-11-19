@@ -7,7 +7,9 @@ const {
   VERIFY_USER,
   USER_CONNECTED,
   USER_DISCONNECTED,
-  OTHER_DISCONNECTED
+  OTHER_DISCONNECTED,
+  OTHER_SENT,
+  SELF_SENT
 } = require('../constants/Events');
 const {
   EMPTY,
@@ -21,7 +23,6 @@ const {
 } = require('../Factory');
 
 let connectedUsers = {};
-// let messages = [];
 
 module.exports = (socket) => {
   console.log(`Socket id = ${socket.id}`);
@@ -33,13 +34,18 @@ module.exports = (socket) => {
   socket.on(USER_CONNECTED, (user) => {
     connectedUsers = addUser(connectedUsers, user);
     console.log(connectedUsers);
-  })
+  });
 
   socket.on(USER_DISCONNECTED, (username) => {
     connectedUsers = removeUser(connectedUsers, username);
-    console.log(connectedUsers);
+    // console.log(connectedUsers);
     socket.broadcast.emit(OTHER_DISCONNECTED, username);
-  })
+  });
+
+  socket.on(SELF_SENT, (username, content) => {
+    socket.broadcast.emit(OTHER_SENT, username, content);
+  });
+
 };
 
 const addUser = (userList, user) => _.assign({}, userList, { [user.name]: user });

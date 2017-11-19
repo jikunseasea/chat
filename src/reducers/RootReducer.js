@@ -6,7 +6,7 @@ import {
   SET_LOGIN_ERROR,
   SET_IS_CONNECTED,
   SET_IS_EMPTY_SEND,
-  SET_IS_LOGINED,
+  // SET_IS_LOGINED,
   POST_MSG,
   SET_TYPING_VALUE
 } from '../constants/ActionName';

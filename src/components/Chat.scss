@@ -11,31 +11,43 @@ html {
     position: absolute;
 
     .chat {
-      position: absolute;
-      width: 100%;
-      @include full-height();
-      display: flex;
-      flex-flow: column nowrap;
+      // position: absolute;
+      // width: 100%;
+      // @include full-height();
+      // display: flex;
+      // flex-flow: column nowrap;
 
       .welcome {
         padding-left: 3rem;
         padding-right: 3rem;
-        flex: none;
+        // flex: none;
+        position: fixed;
+        top: 0;
+        width: 100%;
       }
 
       .messages {
-        flex: 1;
-        margin-bottom: 3rem;
+        // flex: 1;
+        margin-bottom: 5rem;
+        font-size: 1.7rem;
+        list-style-type: none;
+        padding-left: 0;
+        position: fixed;
+        bottom: 0;
+        z-index: -1;
       }
 
       .send {
-        flex: 0 0 4rem;
+        // flex: 0 0 4rem;
+        position: fixed;
+        height: 4rem;
+        bottom: 0;
         background-color: #aaa;
         .full-height {
           @include full-height();
           .full-height-change {
-            @include full-height();
             display: inline-block;
+            @include full-height();
           }
         }
       }
