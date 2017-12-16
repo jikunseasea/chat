@@ -27,8 +27,8 @@ A chat app created by socket.io, react and redux.
   yarn start
   ```
 
-  ![login]('./dis-img/1.png')
+  ![login]('https://github.com/jkest/chat/blob/master/dis-img/1.png')
 
-![chat-jkest]('dis-img/2.png')
+  ![chat-jkest]('https://github.com/jkest/chat/blob/master/dis-img/2.png')
 
-  ![someother]('./dis-img/3.png')
+  ![someother]('https://github.com/jkest/chat/blob/master/dis-img/3.png')
