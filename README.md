@@ -10,19 +10,8 @@ A chat app created by socket.io, react and redux.
   npm install
   ```
 
-  or if you use yarn:
-
-  ```
-  yarn
-  ```
 - Run
 
   ```
   npm start
-  ```
-
-  or
-
-  ```
-  yarn start
   ```
